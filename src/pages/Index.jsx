@@ -1,5 +1,14 @@
 import React from "react";
 
-const IndexComponent = props => <h1>Test</h1>
+class IndexComponent extends React.Component {
+  componentWillMount() {
+    console.log(this.props);
+  }
+  render() {
+    return (
+      <h1>OK</h1>
+    );
+  }
+}
 
-module.exports = IndexComponent;
+export default IndexComponent;

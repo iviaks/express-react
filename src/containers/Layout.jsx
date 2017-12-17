@@ -17,4 +17,4 @@ class LayoutComponent extends React.PureComponent {
 }
 
 
-module.exports = LayoutComponent;
+export default LayoutComponent;

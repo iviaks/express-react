@@ -353,52 +353,103 @@ module.exports = warning;
 /* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var express = __webpack_require__(10);
+"use strict";
 
-var bodyParser = __webpack_require__(11);
 
-var React = __webpack_require__(0);
+__webpack_require__(11);
 
-var ReactDOMServer = __webpack_require__(12);
+var _react = _interopRequireDefault(__webpack_require__(0));
 
-var app = express.Router();
+var _server = _interopRequireDefault(__webpack_require__(12));
+
+var _express = _interopRequireDefault(__webpack_require__(21));
+
+var _bodyParser = _interopRequireDefault(__webpack_require__(22));
+
+var _Layout = _interopRequireDefault(__webpack_require__(23));
+
+var _Index = _interopRequireDefault(__webpack_require__(24));
+
+var _client = _interopRequireDefault(__webpack_require__(25));
+
+var _graphqlTag = _interopRequireDefault(__webpack_require__(30));
+
+var _templateObject = /*#__PURE__*/ _taggedTemplateLiteral(["\n    {\n      users {\n        edges {\n          node {\n            email\n          }\n        }\n      }\n    }\n  "], ["\n    {\n      users {\n        edges {\n          node {\n            email\n          }\n        }\n      }\n    }\n  "]);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _taggedTemplateLiteral(strings, raw) { return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } } function _next(value) { step("next", value); } function _throw(err) { step("throw", err); } _next(); }); }; }
+
+var app = _express.default.Router();
+
 var production = process.env.NODE_ENV === "production";
-app.use(bodyParser.urlencoded({
+app.use(_bodyParser.default.urlencoded({
   extended: false
 }));
-app.use(bodyParser.json());
+app.use(_bodyParser.default.json());
 app.use(function (req, res, next) {
   res.static = function (component, layoutProps) {
     var props = Object.assign({}, {
       originalUrl: req.originalUrl,
       user: req.user
     }, layoutProps);
-    var Layout = React.createElement(__webpack_require__(21), props, component);
-    var html = ReactDOMServer.renderToStaticMarkup(Layout);
-    res.send("<!doctype html>" + html);
+
+    var Layout = _react.default.createElement(_Layout.default, props, component);
+
+    res.send("<!doctype html>" + _server.default.renderToStaticMarkup(Layout));
   };
 
   next();
 });
-app.get("/", function (req, res) {
-  var Index = React.createElement(__webpack_require__(22));
-  res.static(Index, {
-    title: "Test index page"
-  });
-});
+app.get("/", function () {
+  var _ref = _asyncToGenerator(
+  /*#__PURE__*/
+  regeneratorRuntime.mark(function _callee(req, res) {
+    var IndexQuery, IndexProps, Index;
+    return regeneratorRuntime.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            IndexQuery = (0, _graphqlTag.default)(_templateObject);
+            _context.next = 3;
+            return _client.default.query({
+              query: IndexQuery
+            });
+
+          case 3:
+            IndexProps = _context.sent;
+            Index = _react.default.createElement(_Index.default, IndexProps);
+            res.static(Index, {
+              title: "Test index page"
+            });
+
+          case 6:
+          case "end":
+            return _context.stop();
+        }
+      }
+    }, _callee, this);
+  }));
+
+  return function (_x, _x2) {
+    return _ref.apply(this, arguments);
+  };
+}());
 module.exports = app;
 
 /***/ }),
 /* 10 */
 /***/ (function(module, exports) {
 
-module.exports = require("express");
+module.exports = require("node-fetch");
 
 /***/ }),
 /* 11 */
 /***/ (function(module, exports) {
 
-module.exports = require("body-parser");
+module.exports = require("babel-polyfill");
 
 /***/ }),
 /* 12 */
@@ -3273,10 +3324,27 @@ module.exports = camelize;
 
 /***/ }),
 /* 21 */
+/***/ (function(module, exports) {
+
+module.exports = require("express");
+
+/***/ }),
+/* 22 */
+/***/ (function(module, exports) {
+
+module.exports = require("body-parser");
+
+/***/ }),
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
 
 var _react = _interopRequireDefault(__webpack_require__(0));
 
@@ -3319,24 +3387,129 @@ function (_React$PureComponent) {
   return LayoutComponent;
 }(_react.default.PureComponent);
 
-module.exports = LayoutComponent;
+var _default = LayoutComponent;
+exports.default = _default;
 
 /***/ }),
-/* 22 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
 var _react = _interopRequireDefault(__webpack_require__(0));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var IndexComponent = function IndexComponent(props) {
-  return _react.default.createElement("h1", null, "Test");
-};
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
-module.exports = IndexComponent;
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var IndexComponent =
+/*#__PURE__*/
+function (_React$Component) {
+  _inherits(IndexComponent, _React$Component);
+
+  function IndexComponent() {
+    _classCallCheck(this, IndexComponent);
+
+    return _possibleConstructorReturn(this, (IndexComponent.__proto__ || Object.getPrototypeOf(IndexComponent)).apply(this, arguments));
+  }
+
+  _createClass(IndexComponent, [{
+    key: "componentWillMount",
+    value: function componentWillMount() {
+      console.log(this.props);
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      return _react.default.createElement("h1", null, "OK");
+    }
+  }]);
+
+  return IndexComponent;
+}(_react.default.Component);
+
+var _default = IndexComponent;
+exports.default = _default;
+
+/***/ }),
+/* 25 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _nodeFetch = _interopRequireDefault(__webpack_require__(10));
+
+var _apolloClient = __webpack_require__(26);
+
+var _reactApollo = __webpack_require__(27);
+
+var _apolloLinkHttp = __webpack_require__(28);
+
+var _apolloCacheInmemory = __webpack_require__(29);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var _default = new _apolloClient.ApolloClient({
+  link: new _apolloLinkHttp.HttpLink({
+    uri: "http://api.cooklist.co/graphql",
+    fetch: _nodeFetch.default
+  }),
+  cache: new _apolloCacheInmemory.InMemoryCache()
+});
+
+exports.default = _default;
+
+/***/ }),
+/* 26 */
+/***/ (function(module, exports) {
+
+module.exports = require("apollo-client");
+
+/***/ }),
+/* 27 */
+/***/ (function(module, exports) {
+
+module.exports = require("react-apollo");
+
+/***/ }),
+/* 28 */
+/***/ (function(module, exports) {
+
+module.exports = require("apollo-link-http");
+
+/***/ }),
+/* 29 */
+/***/ (function(module, exports) {
+
+module.exports = require("apollo-cache-inmemory");
+
+/***/ }),
+/* 30 */
+/***/ (function(module, exports) {
+
+module.exports = require("graphql-tag");
 
 /***/ })
 /******/ ]);

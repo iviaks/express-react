@@ -1,8 +1,16 @@
-const express = require("express");
-const bodyParser = require("body-parser");
-const React = require("react");
-const ReactDOMServer = require("react-dom/server");
+import "babel-polyfill";
+import React from "react";
+import ReactDOMServer from "react-dom/server";
+
+import express from "express";
+import bodyParser from "body-parser";
 let app = express.Router();
+
+import LayoutComponent from "Scripts/containers/Layout";
+import IndexComponent from "Scripts/pages/Index";
+
+import ApolloClient from "Scripts/utils/apollo/client";
+import gql from "graphql-tag";
 
 let production = process.env.NODE_ENV === "production";
 
@@ -17,19 +25,28 @@ app.use((req, res, next) => {
       layoutProps
     );
 
-    const Layout = React.createElement(
-      require("Scripts/containers/Layout"),
-      props,
-      component
-    );
-    let html = ReactDOMServer.renderToStaticMarkup(Layout);
-    res.send("<!doctype html>" + html);
+    const Layout = React.createElement(LayoutComponent, props, component);
+    res.send("<!doctype html>" + ReactDOMServer.renderToStaticMarkup(Layout));
   };
   next();
 });
 
-app.get("/", (req, res) => {
-  const Index = React.createElement(require("Scripts/pages/Index"));
+app.get("/", async (req, res) => {
+  const IndexQuery = gql`
+    {
+      users {
+        edges {
+          node {
+            email
+          }
+        }
+      }
+    }
+  `;
+
+  const IndexProps = await ApolloClient.query({ query: IndexQuery });
+
+  const Index = React.createElement(IndexComponent, IndexProps);
   res.static(Index, {
     title: "Test index page"
   });
